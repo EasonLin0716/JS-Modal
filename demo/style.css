@@ -1,0 +1,40 @@
+html,
+body {
+  margin: 0;
+  background-color: azure;
+  padding: 10px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+main {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+span {
+  display: block;
+}
+
+code {
+  display: block;
+  margin: 20px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #eff1f9;
+}
+
+table {
+  width: 100%;
+}
+
+th {
+  background-color: #333;
+  color: #fff;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 10px;
+  border: 1px solid #333;
+}

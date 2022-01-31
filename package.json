@@ -1,0 +1,23 @@
+{
+  "name": "js-modal",
+  "version": "0.0.1",
+  "description": "Easy usage and lightweight vanilla js modal",
+  "main": "src/js-modal.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode production",
+    "watch": "webpack --watch --progress"
+  },
+  "keywords": [
+    "modal"
+  ],
+  "author": "EasonLin0716",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^6.5.1",
+    "mini-css-extract-plugin": "^2.5.3",
+    "webpack": "^5.67.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-remove-empty-scripts": "^0.7.2"
+  }
+}

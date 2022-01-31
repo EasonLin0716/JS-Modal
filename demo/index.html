@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS Modal Example</title>
+    <link
+      rel="stylesheet"
+      href="https://necolas.github.io/normalize.css/8.0.1/normalize.css"
+    />
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="../dist/js-modal.min.css" />
+  </head>
+  <body>
+    <main>
+      <h1>JS Modal</h1>
+      <p>Easy usage and lightweight vanilla js modal</p>
+      <h2>Installation</h2>
+      <p>You can install it by npm or simply by CDN</p>
+      <h2>Usage</h2>
+      <p>Open the modal:</p>
+      <code>modal.open(el, options)</code>
+      <p>Close the modal:</p>
+      <code>modal.close()</code>
+      <h3>Example1: Using with default options</h3>
+      <code>
+        <span>// first select root element you want to display in modal.</span>
+        <span>const myModal = document.querySelector('#my-modal');</span>
+        <br />
+        <span>// use modal.open to open it.</span>
+        <span>modal.open(myModal);</span>
+      </code>
+      <button id="example-1">Open Example Modal 1</button>
+      <div id="modal-example-1" class="modal">
+        <p>This is a simple modal</p>
+      </div>
+      <h3>Example2: Draggable modal</h3>
+      <code>
+        <span>// there're some available options which can be customized.</span>
+        <span>modal.open(myModal, { allowDrag: true })</span>
+      </code>
+      <button id="example-2">Open Example Modal 2</button>
+      <div id="modal-example-2" class="modal">
+        <p>This modal is draggable!!</p>
+      </div>
+      <h3>Example3: A modal which can only be closed by clicking ok button</h3>
+      <code>
+        <span>const myModal = document.querySelector('#my-modal');</span>
+        <span>const closeBtn = myModal.querySelector('#close-btn');</span>
+        <br />
+        <span
+          >modal.open(myModal, { showClose: false, escapeClose: false,
+          clickClose: false, });</span
+        >
+        <br />
+        <span>// You can bind a function to close modal on its button</span>
+        <span
+          >closeBtn.addEventListener("click", function () { modal.close();
+          });</span
+        >
+      </code>
+      <button id="example-3">Open Example Modal 3</button>
+      <div id="modal-example-3" class="modal">
+        <p>You cannot close the modal unless you press ok</p>
+        <button id="close-example-3">ok</button>
+      </div>
+      <h2>Options</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Option</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>containerClasses</td>
+            <td>array</td>
+            <td>["mask"]</td>
+            <td>Outer container css classes, accept multiple classes.</td>
+          </tr>
+          <tr>
+            <td>closeClass</td>
+            <td>string</td>
+            <td>"close-modal"</td>
+            <td>Closing icon css class.</td>
+          </tr>
+          <tr>
+            <td>modalClass</td>
+            <td>string</td>
+            <td>"modal"</td>
+            <td>
+              Modal content container class. This class will be append to the
+              element passed in modal.open
+            </td>
+          </tr>
+          <tr>
+            <td>fadeDuration</td>
+            <td>number</td>
+            <td>260</td>
+            <td>Fading duration.</td>
+          </tr>
+          <tr>
+            <td>fadeDelay</td>
+            <td>number</td>
+            <td>0.6</td>
+            <td>Modal content fade delay.</td>
+          </tr>
+          <tr>
+            <td>showClose</td>
+            <td>boolean</td>
+            <td>true</td>
+            <td>Allow display close button or not.</td>
+          </tr>
+          <tr>
+            <td>escapeClose</td>
+            <td>boolean</td>
+            <td>true</td>
+            <td>Allow close by escape button.</td>
+          </tr>
+          <tr>
+            <td>clickClose</td>
+            <td>boolean</td>
+            <td>true</td>
+            <td>Allow close by clicking background.</td>
+          </tr>
+          <tr>
+            <td>allowDrag</td>
+            <td>boolean</td>
+            <td>false</td>
+            <td>Allow modal to be dragged.</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+    <script src="../dist/js-modal.js"></script>
+    <script>
+      const btnExample1 = document.querySelector("#example-1");
+      const modalExample1 = document.querySelector("#modal-example-1");
+      btnExample1.addEventListener("click", function () {
+        modal.open(modalExample1);
+      });
+      const btnExample2 = document.querySelector("#example-2");
+      const modalExample2 = document.querySelector("#modal-example-2");
+      btnExample2.addEventListener("click", function () {
+        modal.open(modalExample2, { allowDrag: true });
+      });
+      const btnExample3 = document.querySelector("#example-3");
+      const modalExample3 = document.querySelector("#modal-example-3");
+      btnExample3.addEventListener("click", function () {
+        modal.open(modalExample3, {
+          showClose: false,
+          escapeClose: false,
+          clickClose: false,
+        });
+      });
+      const closeExample3 = modalExample3.querySelector("#close-example-3");
+      closeExample3.addEventListener("click", function () {
+        modal.close();
+      });
+    </script>
+  </body>
+</html>
