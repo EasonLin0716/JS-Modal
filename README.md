@@ -2,9 +2,30 @@
 
 Easy usage and lightweight vanilla js modal
 
+## Demo
+
+https://easonlin0716.github.io/JS-Modal/demo/index.html
+
 ## Installation
 
 You can install it by npm or simply by CDN
+
+### npm
+
+```
+import modal from "@easonlin0716/js-modal";
+import "@easonlin0716/js-modal/dist/js-modal.min.css";
+```
+
+### cdn
+
+```
+// put css and js resources in your .html or any template
+// css
+<link rel="stylesheet" href="https://unpkg.com/@easonlin0716/js-modal@0.0.2/dist/js-modal.min.css" />
+// js
+<script src="https://unpkg.com/@easonlin0716/js-modal@0.0.2/dist/js-modal.js"></script>
+```
 
 ## Usage
 
