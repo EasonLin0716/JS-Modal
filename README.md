@@ -13,6 +13,12 @@ You can install it by npm or simply by CDN
 ### npm
 
 ```
+npm install @easonlin0716/js-modal
+```
+
+#### usage
+
+```
 import modal from "@easonlin0716/js-modal";
 import "@easonlin0716/js-modal/dist/js-modal.min.css";
 ```
