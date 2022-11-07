@@ -28,9 +28,9 @@ import "@easonlin0716/js-modal/dist/js-modal.min.css";
 ```
 // put css and js resources in your .html or any template
 // css
-<link rel="stylesheet" href="https://unpkg.com/@easonlin0716/js-modal@0.0.2/dist/js-modal.min.css" />
+<link rel="stylesheet" href="https://unpkg.com/@easonlin0716/js-modal/dist/js-modal.min.css" />
 // js
-<script src="https://unpkg.com/@easonlin0716/js-modal@0.0.2/dist/js-modal.js"></script>
+<script src="https://unpkg.com/@easonlin0716/js-modal/dist/js-modal.js"></script>
 ```
 
 ## Usage
