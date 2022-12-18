@@ -1,53 +1,65 @@
 /**
  * 淡入功能
- *
- * @param {object} el 要淡入的DOM元素
+ * 
+ * @param {object} el 要淡入的DOM元素 
  * @param {string} display 顯示時的display屬性(block, inline-block, inline, flex...)
- * @param {number} duration 淡入的毫秒數，預設為400
+ * @param {number} duration 淡入的毫秒數，預設為400，若設為0則跳過淡入動畫直接呈現
+ * @param {function} callback 淡入後呼叫的函式
  */
-export const fadeIn = function (el, display, duration) {
-  if (el.isFadeIn) return;
-  el.isFadeIn = true;
-  duration = duration || 400;
-  el.style.opacity = 0;
-  el.style.display = display || "block";
-  var runningPeriodInSecond = 1000 / 60;
-  var updatingGrowth = 1 / (duration / runningPeriodInSecond);
-  (function fade() {
-    var val = parseFloat(el.style.opacity);
-    if (!((val += updatingGrowth) > 1)) {
-      el.style.opacity = val;
-      requestAnimationFrame(fade);
-    }
-  })();
-  setTimeout(() => {
-    el.style.opacity = 1;
-    el.isFadeOut = false;
-  }, duration);
-};
+ export const fadeIn = function (el, display="inline-block", duration=400, callback) {
+  if (!el) return;
+
+  el.style.opacity = el.style.opacity || 0;
+  el.style.display = display;
+  el.style.visibility = "visible";
+
+  if(duration) {
+      let opacity = parseFloat(el.style.opacity) || 0;
+      const timer = setInterval( function() {
+      opacity += 20 / duration;
+      if( opacity >= 1 ) {
+          clearInterval(timer);
+          opacity = 1;
+          if (typeof callback === 'function') {
+              callback();
+          }
+      }
+      el.style.opacity = opacity;
+      }, 20 );
+  }
+  else {
+      el.style.opacity = 1;
+  }
+}; 
 
 /**
- * 淡出功能
- *
- * @param {object} el 要淡出的DOM元素
- * @param {number} duration 淡出的毫秒數，預設為400
- */
-export const fadeOut = function (el, duration) {
-  if (el.isFadeOut) return;
-  el.isFadeOut = true;
-  duration = duration || 400;
-  el.style.opacity = 1;
-  var runningPeriodInSecond = 1000 / 60;
-  var updatingGrowth = 1 / (duration / runningPeriodInSecond);
-  (function fade() {
-    if ((el.style.opacity -= updatingGrowth) < 0) {
+* 淡出功能
+* 
+* @param {object} el 要淡出的DOM元素 
+* @param {number} duration 淡出的毫秒數，預設為400，若設為0則直接跳過淡出動畫直接消失
+* @param {function} callback 淡出後呼叫的函式
+*/
+export const fadeOut = function(el, duration=400, callback) {
+  if(!el) return;
+
+  if(duration) {
+      let opacity = 1;
+      const timer = setInterval( function() {
+      opacity -= 20 / duration;
+      if(opacity <= 0) {
+          clearInterval(timer);
+          opacity = 0;
+          el.style.display = "none";
+          el.style.visibility = "hidden";
+          if (typeof callback === 'function') {
+              callback();
+          }
+      }
+      el.style.opacity = opacity;
+      }, 20);
+  } else {
+      el.style.opacity = 0;
       el.style.display = "none";
-    } else {
-      requestAnimationFrame(fade);
-    }
-  })();
-  setTimeout(() => {
-    el.style.opacity = 0;
-    el.isFadeIn = false;
-  }, duration);
+      el.style.visibility = "hidden";
+  }
 };
