@@ -5,7 +5,7 @@ const RemoveEmptyScriptsPlugin = require("webpack-remove-empty-scripts");
 
 const config = {
   entry: {
-    "js-modal": "./scripts/build.js",
+    "js-modal": "./scripts/build.ts",
     "js-modal.min": "./src/js-modal.css",
   },
   output: {
@@ -20,18 +20,14 @@ const config = {
       },
       {
         test: /\.ts(x)?$/,
-        loader: 'ts-loader',
-        exclude: /node_modules/
+        loader: "ts-loader",
+        exclude: /node_modules/,
       },
     ],
   },
   resolve: {
-    extensions: [
-      '.tsx',
-      '.ts',
-      '.js'
-    ]
-  }
+    extensions: [".tsx", ".ts", ".js"],
+  },
 };
 
 module.exports = config;
