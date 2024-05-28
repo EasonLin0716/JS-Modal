@@ -1,6 +1,6 @@
 {
   "name": "@easonlin0716/js-modal",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Easy usage and lightweight vanilla js modal",
   "main": "src/js-modal.js",
   "scripts": {
