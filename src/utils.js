@@ -7,7 +7,9 @@
  * @param {function} callback 淡入後呼叫的函式
  */
  export const fadeIn = function (el, display="inline-block", duration=400, callback) {
-  if (!el) return;
+  if (!el) {
+    throw new Error('missing el argument');
+  };
 
   el.style.opacity = el.style.opacity || 0;
   el.style.display = display;
@@ -40,7 +42,9 @@
 * @param {function} callback 淡出後呼叫的函式
 */
 export const fadeOut = function(el, duration=400, callback) {
-  if(!el) return;
+    if (!el) {
+        throw new Error('missing el argument');
+    };
 
   if(duration) {
       let opacity = 1;
