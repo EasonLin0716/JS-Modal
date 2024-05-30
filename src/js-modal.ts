@@ -7,6 +7,10 @@ interface ActiveModal {
   container: HTMLDivElement;
   _options: ModalOptions;
 }
+interface LocationPosition { 
+    left: number;
+    top: number; 
+}
 
 export default (function () {
   /**
@@ -21,7 +25,7 @@ export default (function () {
    * @property {boolean} escapeClose 是否能透過 ESC 按鈕關閉 Modal
    * @property {boolean} clickClose 是否能透過點選 Mask 區塊關閉
    */
-  var defaultOptions: ModalOptions = {
+  const defaultOptions: ModalOptions = {
     containerClasses: ["mask", "blocker", "current"],
     closeClass: "close-modal",
     modalClass: "modal",
@@ -32,7 +36,7 @@ export default (function () {
     clickClose: true,
     allowDrag: false,
   };
-  var activeModals: ActiveModal[] = [];
+  const activeModals: ActiveModal[] = [];
 
   /**
    * 建立 Modal 外層的 Container
@@ -40,9 +44,9 @@ export default (function () {
    * @param {object} 自定義選項
    * @returns {object} Modal 的外層 Container DOM 元素
    */
-  function createModalContainer(options: ModalOptions = defaultOptions) {
-    var container: HTMLDivElement = document.createElement("div");
-    var classes: string[] = options.containerClasses || [];
+  function createModalContainer(options: ModalOptions = defaultOptions): HTMLDivElement {
+    const container: HTMLDivElement = document.createElement("div");
+    const classes: string[] = options.containerClasses || [];
     classes.forEach(function (addingClass) {
       container.classList.add(addingClass);
     });
@@ -55,8 +59,8 @@ export default (function () {
    * @param {object} 自定義選項
    * @returns {object} Modal 的外層 Button DOM 元素
    */
-  function createModalCloseButton(options = defaultOptions) {
-    var closeBtn: HTMLAnchorElement = document.createElement("a");
+  function createModalCloseButton(options = defaultOptions): HTMLAnchorElement {
+    const closeBtn: HTMLAnchorElement = document.createElement("a");
     closeBtn.href = "javascript:;";
     closeBtn.classList.add(options.closeClass || ""); // Provide a default value of an empty string if options.closeClass is undefined
     closeBtn.addEventListener("click", function () {
@@ -70,7 +74,7 @@ export default (function () {
    *
    * @param {object} event Document 綁定的事件
    */
-  function closeOnEscape(event: KeyboardEvent) {
+  function closeOnEscape(event: KeyboardEvent): void {
     if (event.key === "Escape") close();
   }
 
@@ -79,7 +83,7 @@ export default (function () {
    *
    * @param {object} customOptions 傳入欲修改的屬性
    */
-  function setOptions(customOptions: ModalOptions) {
+  function setOptions(customOptions: ModalOptions): void {
     Object.keys(customOptions).forEach((key) => {
       const k = key as keyof ModalOptions;
       if (customOptions[k] !== undefined) {
@@ -88,10 +92,10 @@ export default (function () {
     });
   }
 
-  function mergeOptions(customOptions: ModalOptions) {
-    var mergedOption = JSON.parse(JSON.stringify(defaultOptions));
+  function mergeOptions(customOptions: ModalOptions): ModalOptions {
+    const mergedOption = JSON.parse(JSON.stringify(defaultOptions));
     if (typeof customOptions === "object") {
-      for (var k in customOptions) {
+      for (const k in customOptions) {
         mergedOption[k] = customOptions[k];
       }
     }
@@ -104,17 +108,17 @@ export default (function () {
    * @param {object} el 要從modal開啟的DOM元素
    * @param {object} options 客製化選項(預設為defaultOptions)
    */
-  function open(el: HTMLElement, options = {}) {
-    var _options = mergeOptions(options);
+  function open(el: HTMLElement, options = {}): void {
+    const _options = mergeOptions(options);
 
     el.classList.add(_options.modalClass);
 
     if (_options.showClose) {
-      var closeBtn = createModalCloseButton(_options);
+      const closeBtn: HTMLAnchorElement = createModalCloseButton(_options);
       el.appendChild(closeBtn);
     }
 
-    var container = createModalContainer(_options);
+    const container: HTMLDivElement = createModalContainer(_options);
     document.body.appendChild(container);
     container.appendChild(el);
 
@@ -151,18 +155,18 @@ export default (function () {
    *
    * @param {object} options 客製化選項(預設為defaultOptions)
    */
-  function close() {
+  function close(): void {
     if (!activeModals.length) return;
 
-    var _options = activeModals[activeModals.length - 1]._options;
+    const _options = activeModals[activeModals.length - 1]._options;
 
     if (_options.escapeClose) {
       document.removeEventListener("keydown", closeOnEscape);
     }
 
-    var container: HTMLElement =
+    const container: HTMLElement =
       activeModals[activeModals.length - 1].container;
-    var el: HTMLElement = container.querySelector(
+    const el: HTMLElement = container.querySelector(
       `.${_options.modalClass}`
     ) as HTMLElement;
 
@@ -176,7 +180,7 @@ export default (function () {
     setTimeout(function () {
       document.body.appendChild(el);
       if (_options.showClose) {
-        var closeBtn: HTMLElement = el.querySelector(
+        const closeBtn: HTMLElement = el.querySelector(
           `.${_options.closeClass}`
         ) as HTMLElement;
         closeBtn.remove();
@@ -192,34 +196,34 @@ export default (function () {
    * 拖曳功能
    * @returns
    */
-  function drag() {
+  function drag(): void {
     if (!activeModals.length) return;
 
-    var _options: ModalOptions = activeModals[activeModals.length - 1]._options;
+    const _options: ModalOptions = activeModals[activeModals.length - 1]._options;
 
     if (!_options || !_options.allowDrag) return;
 
-    var LEFT_REMAIN: number = 30,
-      TOP_REMAIN: number = 30;
+    const LEFT_REMAIN: number = 30;
+    const TOP_REMAIN: number = 30;
 
-    var container: HTMLElement =
+    const container: HTMLElement =
       activeModals[activeModals.length - 1].container;
-    var el: HTMLElement = container.querySelector(
+    const el: HTMLElement = container.querySelector(
       `.${_options.modalClass}`
     ) as HTMLElement;
 
     initDragRequiredStyles();
 
-    var initialShiftLeft = 0,
-      initialShiftTop = 0;
-    var shiftLeft = 0,
-      shiftTop = 0;
+    let initialShiftLeft: number = 0;
+    let initialShiftTop: number = 0;
+    let shiftLeft: number = 0;
+    let shiftTop: number = 0;
 
     el.addEventListener("mousedown", handleMouseDown);
 
-    function handleMouseDown(event: MouseEvent) {
+    function handleMouseDown(event: MouseEvent): void {
       // 避免 Modal 後方反白副作用(IE Only)
-      var target: HTMLElement = event.target as HTMLElement;
+      const target: HTMLElement = event.target as HTMLElement;
       if (isInput(target)) return;
 
       if (isIE()) {
@@ -233,7 +237,7 @@ export default (function () {
       document.addEventListener("mouseup", handleMouseUp);
     }
 
-    function handleMouseUp() {
+    function handleMouseUp(): void {
       if (isIE()) {
         // 針對 IE enable body 的 user-select
         document.body.classList.remove("ie-select--disabled");
@@ -243,14 +247,14 @@ export default (function () {
       document.removeEventListener("mouseup", handleMouseUp);
     }
 
-    function dragStart(event: MouseEvent) {
+    function dragStart(event: MouseEvent): void {
       // 避免 Modal 後方反白副作用
       if (isIE()) {
         event.stopPropagation();
       }
       event.preventDefault();
       // 計算偏移值
-      var newLocation = getLimitCalculatedLocation(event);
+      const newLocation = getLimitCalculatedLocation(event);
       shiftLeft = newLocation.left;
       shiftTop = newLocation.top;
       updateElementLocation();
@@ -259,9 +263,9 @@ export default (function () {
     /**
      * 更新水平、垂直起始偏移值
      */
-    function setInitialShiftLocation(event: MouseEvent) {
-      var elementCurrentLeft = Number(el.style.left.replace("px", ""));
-      var elementCurrentTop = Number(el.style.top.replace("px", ""));
+    function setInitialShiftLocation(event: MouseEvent): void {
+      const elementCurrentLeft: number = Number(el.style.left.replace("px", ""));
+      const elementCurrentTop: number = Number(el.style.top.replace("px", ""));
       initialShiftLeft = event.clientX - elementCurrentLeft;
       initialShiftTop = event.clientY - elementCurrentTop;
     }
@@ -271,10 +275,10 @@ export default (function () {
      * @returns {object} 校正後的拖曳值 left, top
      */
     function getLimitCalculatedLocation(event: MouseEvent) {
-      var newShiftLeft = event.clientX - initialShiftLeft;
-      var newShiftTop = event.clientY - initialShiftTop;
+      let newShiftLeft: number = event.clientX - initialShiftLeft;
+      let newShiftTop: number = event.clientY - initialShiftTop;
 
-      var limitedPositions = getLimitedPositions();
+      const limitedPositions: LocationPosition = getLocationPosition();
       // 左右校正
       if (newShiftLeft < 0) {
         if (Math.abs(newShiftLeft) > limitedPositions.left) {
@@ -301,7 +305,7 @@ export default (function () {
         }
       }
 
-      var newLocation = {
+      const newLocation: LocationPosition = {
         left: newShiftLeft,
         top: newShiftTop,
       };
@@ -313,15 +317,16 @@ export default (function () {
      * 依瀏覽器現狀計算 modal 可超出邊界的最大值
      * @returns {object} left 為水平最大值；top 為垂直最大值
      */
-    function getLimitedPositions() {
-      var modalWidth = el.clientWidth;
-      var modalHeight = el.clientHeight;
-      var viewportWidth = window.innerWidth;
-      var viewportHeight = window.innerHeight;
-      var leftMaskWidth = Math.floor((viewportWidth - modalWidth) / 2);
-      var topMaskWidth = Math.floor((viewportHeight - modalHeight) / 2);
+    function getLocationPosition(): LocationPosition {
 
-      var limitedPositions = {
+      const modalWidth: number = el.clientWidth;
+      const modalHeight: number = el.clientHeight;
+      const viewportWidth: number = window.innerWidth;
+      const viewportHeight: number = window.innerHeight;
+      const leftMaskWidth: number = Math.floor((viewportWidth - modalWidth) / 2);
+      const topMaskWidth: number = Math.floor((viewportHeight - modalHeight) / 2);
+
+      const limitedPositions: LocationPosition = {
         left: leftMaskWidth + modalWidth - LEFT_REMAIN,
         top: topMaskWidth + modalHeight - TOP_REMAIN,
       };
@@ -353,8 +358,8 @@ export default (function () {
      * @param {object} element DOM節點
      * @returns {boolean} 是否為輸入元素
      */
-    function isInput(element: HTMLElement) {
-      var INPUT_NODE_NAMES = ["INPUT", "TEXTAREA", "SELECT"];
+    function isInput(element: HTMLElement): boolean {
+      const INPUT_NODE_NAMES = ["INPUT", "TEXTAREA", "SELECT"];
       return element && INPUT_NODE_NAMES.indexOf(element.nodeName) !== -1;
     }
 
@@ -363,8 +368,8 @@ export default (function () {
      * @returns {boolean} 是否為IE瀏覽器
      */
     function isIE() {
-      var inBrowser = typeof window !== "undefined";
-      var UA = inBrowser && window.navigator.userAgent.toLowerCase();
+      const inBrowser: boolean = typeof window !== "undefined";
+      const UA = inBrowser && window.navigator.userAgent.toLowerCase();
       return UA && /msie|trident/.test(UA);
     }
   }
@@ -373,9 +378,9 @@ export default (function () {
    * 阻擋滾動軸
    *
    */
-  function blockScroll() {
-    var scrollTop = document.body?.getBoundingClientRect()?.top || 0;
-    var bodyStyle = document.body.style;
+  function blockScroll(): void {
+    const scrollTop = document.body?.getBoundingClientRect()?.top || 0;
+    const bodyStyle = document.body.style;
     bodyStyle.top = `${scrollTop}px`;
     bodyStyle.width = "100%";
     bodyStyle.overflowX = "hidden";
@@ -388,8 +393,8 @@ export default (function () {
    *
    */
   function unblockScroll() {
-    var scrollTop = Math.abs(document.body?.getBoundingClientRect()?.top) || 0;
-    var bodyStyle = document.body.style;
+    const scrollTop = Math.abs(document.body?.getBoundingClientRect()?.top) || 0;
+    const bodyStyle = document.body.style;
     bodyStyle.overflowX = "unset";
     bodyStyle.overflowY = "unset";
     bodyStyle.position = "static";
