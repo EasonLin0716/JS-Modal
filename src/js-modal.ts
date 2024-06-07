@@ -234,12 +234,6 @@ export default (function () {
       // 避免 Modal 後方反白副作用(IE Only)
       const target: HTMLElement = event.target as HTMLElement;
       if (isInput(target)) return;
-
-      if (isIE()) {
-        // 針對 IE Disable body 的 user-select 避免 Modal 後方也吃到反白
-        document.body.classList.add("ie-select--disabled");
-      }
-
       setInitialShiftLocation(event);
 
       document.addEventListener("mousemove", dragStart);
@@ -247,20 +241,11 @@ export default (function () {
     }
 
     function handleMouseUp(): void {
-      if (isIE()) {
-        // 針對 IE enable body 的 user-select
-        document.body.classList.remove("ie-select--disabled");
-      }
-
       document.removeEventListener("mousemove", dragStart);
       document.removeEventListener("mouseup", handleMouseUp);
     }
 
     function dragStart(event: MouseEvent): void {
-      // 避免 Modal 後方反白副作用
-      if (isIE()) {
-        event.stopPropagation();
-      }
       event.preventDefault();
       // 計算偏移值
       const newLocation = getLimitCalculatedLocation(event);
@@ -370,16 +355,6 @@ export default (function () {
     function isInput(element: HTMLElement): boolean {
       const INPUT_NODE_NAMES = ["INPUT", "TEXTAREA", "SELECT"];
       return element && INPUT_NODE_NAMES.indexOf(element.nodeName) !== -1;
-    }
-
-    /**
-     * 判斷瀏覽器是否為IE
-     * @returns {boolean} 是否為IE瀏覽器
-     */
-    function isIE() {
-      const inBrowser: boolean = typeof window !== "undefined";
-      const UA = inBrowser && window.navigator.userAgent.toLowerCase();
-      return UA && /msie|trident/.test(UA);
     }
   }
 
