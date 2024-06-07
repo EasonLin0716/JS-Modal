@@ -1,11 +1,19 @@
 import { fadeIn, fadeOut } from "./utils";
 
 interface ModalOptions {
-  [key: string]: any;
+    containerClasses: string[];
+    closeClass: string;
+    modalClass: string;
+    fadeDuration: number;
+    fadeDelay: number;
+    showClose: boolean;
+    escapeClose: boolean;
+    clickClose: boolean;
+    allowDrag: boolean;
 }
 interface ActiveModal {
-  container: HTMLDivElement;
-  _options: ModalOptions;
+    container: HTMLDivElement;
+    _options: ModalOptions;
 }
 interface LocationPosition { 
     left: number;
@@ -83,22 +91,23 @@ export default (function () {
    *
    * @param {object} customOptions 傳入欲修改的屬性
    */
-  function setOptions(customOptions: ModalOptions): void {
+  function setOptions(customOptions: Partial<ModalOptions>): void {
     Object.keys(customOptions).forEach((key) => {
       const k = key as keyof ModalOptions;
       if (customOptions[k] !== undefined) {
-        defaultOptions[k] = customOptions[k]!;
+        (defaultOptions[k] as any) = customOptions[k] as any;
       }
     });
   }
 
-  function mergeOptions(customOptions: ModalOptions): ModalOptions {
+  function mergeOptions(customOptions: Partial<ModalOptions>): ModalOptions {
     const mergedOption = JSON.parse(JSON.stringify(defaultOptions));
-    if (typeof customOptions === "object") {
-      for (const k in customOptions) {
-        mergedOption[k] = customOptions[k];
-      }
-    }
+    Object.keys(customOptions).forEach((key) => {
+        const k = key as keyof ModalOptions;
+        if (customOptions[k] !== undefined) {
+          (mergedOption[k] as any) = customOptions[k] as any;
+        }
+    });
     return mergedOption;
   }
 
